@@ -946,11 +946,14 @@
 				_delimiterError = false;
 			}
 
-			if (_config.skipEmptyLines)
-			{
-				for (var i = 0; i < _results.data.length; i++)
-					if (_results.data[i].length === 1 && _results.data[i][0] === '')
-						_results.data.splice(i--, 1);
+			if (_config.skipEmptyLines || _config.skipTrailingEmptyLines) {
+				for (var i = _results.data.length - 1; i >= 0; i--) {
+					if (_results.data[i].length === 1 && _results.data[i][0] === '') {
+						_results.data.splice(i, 1);
+					} else if (_config.skipTrailingEmptyLines) {
+						break;
+					}
+				}
 			}
 
 			if (needsHeaderRow())
